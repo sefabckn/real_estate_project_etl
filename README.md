@@ -1,4 +1,4 @@
-# Real Estate ETL Project
+# Book Store ETL Project
 
 ![ETL diagram](asset/ETL.jpeg)
 
