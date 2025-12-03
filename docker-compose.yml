@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # 1. ETL Runner Service
+  etl_runner:
+    image: ecom-analyzer:latest # Uses the image you built
+    # Override the default CMD to ensure it runs the ETL
+    command: ["python", "-m", "src.etl"] 
+    # Mount the 'data' folder to save the database file persistently
+    volumes:
+      - ./data:/app/data 
+
+  # 2. Dashboard Server Service (Streamlit)
+  dashboard:
+    image: ecom-analyzer:latest # Uses the same image
+    # Override the default CMD to run the Streamlit app
+    command: ["streamlit", "run", "app.py"] 
+    ports:
+      - "8501:8501" # Expose the Streamlit default port to your host machine
+    volumes:
+      - ./data:/app/data # Crucial: Share the database file with the dashboard
+    depends_on:
+      - etl_runner # Ensures the ETL runs and creates the database before Streamlit starts
